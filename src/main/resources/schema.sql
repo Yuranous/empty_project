@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS Document
     doc_type_id  INTEGER COMMENT 'Тип',
     CONSTRAINT fk_user_doc_type FOREIGN KEY (doc_type_id)
         REFERENCES Document_type (id),
-    doc_number VARCHAR(25) COMMENT 'Номер',
-    doc_date   DATE COMMENT 'Дата выдачи'
+    number VARCHAR(25) COMMENT 'Номер',
+    date   DATE COMMENT 'Дата выдачи'
 );
 COMMENT ON TABLE Document IS 'Документ';
 
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS Country
 (
     id      INTEGER COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
     version INTEGER NOT NULL DEFAULT 0 COMMENT 'Служебное поле hibernate',
-    code    INTEGER NOT NULL UNIQUE COMMENT 'Код',
+    citizenship_code    INTEGER NOT NULL UNIQUE COMMENT 'Код',
     name    VARCHAR(25) COMMENT 'Наименование'
 );
 COMMENT ON TABLE Country IS 'Страна';
@@ -71,8 +71,8 @@ CREATE TABLE IF NOT EXISTS User
     doc_id           INTEGER COMMENT 'Документ',
     CONSTRAINT fk_user_doc FOREIGN KEY (doc_id)
         REFERENCES Document (id),
-    citizenship_code INTEGER COMMENT 'Код страны',
-    CONSTRAINT fk_user_citizenship_code FOREIGN KEY (citizenship_code)
+    country_id INTEGER COMMENT 'Код страны',
+    CONSTRAINT fk_user_citizenship_code FOREIGN KEY (country_id)
         REFERENCES Country (id),
     is_identified    BOOLEAN              DEFAULT TRUE COMMENT 'Статус'
 );

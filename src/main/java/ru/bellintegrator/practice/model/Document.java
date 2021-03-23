@@ -1,9 +1,11 @@
 package ru.bellintegrator.practice.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,7 +16,7 @@ import javax.persistence.Version;
 
 @Entity
 @Table(name = "Document")
-public class Document {
+public class Document implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,13 +32,13 @@ public class Document {
     /**
      * Номер
      */
-    @Column(name = "number")
+    @Column(name = "number", length = 25)
     private String number;
 
     /**
      * Дата выдачи
      */
-    @Column(name = "date")
+    @Column(name = "date", columnDefinition = "DATE")
     private LocalDate date;
 
     /**
@@ -46,10 +48,10 @@ public class Document {
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
-            }
+            },
+            fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "id")
-    @Column(name = "doc_type_id")
+    @JoinColumn(name = "doc_type_id")
     private DocumentType type;
 
     /**

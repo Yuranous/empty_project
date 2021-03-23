@@ -4,6 +4,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,14 +13,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "Office")
 public class Office {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Id")
+    @Column(name = "id")
     private Long id;
 
     /**
@@ -59,10 +64,10 @@ public class Office {
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
-            }
+            },
+            fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "id")
-    @Column(name = "org_id", nullable = false)
+    @JoinColumn(name = "org_id", nullable = false)
     private Organization organization;
 
     /**
@@ -74,7 +79,8 @@ public class Office {
                     CascadeType.MERGE,
                     CascadeType.REMOVE
             },
-            mappedBy = "users"
+            mappedBy = "office",
+            fetch = FetchType.LAZY
     )
     private Set<User> users;
 

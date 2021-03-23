@@ -4,6 +4,7 @@ package ru.bellintegrator.practice.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,10 +13,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Пользователь
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "User")
 public class User {
@@ -73,10 +78,10 @@ public class User {
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
-            }
+            },
+            fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "id")
-    @Column(name = "office_id", nullable = false)
+    @JoinColumn(name = "office_id", nullable = false)
     private Office office;
 
     /**
@@ -86,10 +91,10 @@ public class User {
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
-            }
+            },
+            fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "id")
-    @Column(name = "doc_id")
+    @JoinColumn(name = "doc_id")
     private Document document;
 
     /**
@@ -99,10 +104,10 @@ public class User {
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
-            }
+            },
+            fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "id")
-    @Column(name = "country_id")
+    @JoinColumn(name = "country_id")
     private Country country;
 
     /**

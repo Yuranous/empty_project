@@ -1,8 +1,15 @@
+DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS Office;
+DROP TABLE IF EXISTS Organization;
+DROP TABLE IF EXISTS Document;
+DROP TABLE IF EXISTS Document_type;
+DROP TABLE IF EXISTS Country;
+
 CREATE TABLE IF NOT EXISTS Document_type
 (
     id      INTEGER COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
     version INTEGER NOT NULL DEFAULT 0 COMMENT 'Служебное поле hibernate',
-    code    INTEGER NOT NULL UNIQUE COMMENT 'Код',
+    code    INTEGER NOT NULL COMMENT 'Код' UNIQUE,
     name    VARCHAR(150) COMMENT 'Наименование'
 );
 COMMENT ON TABLE Document_type IS 'Тип документа';
@@ -23,7 +30,7 @@ CREATE TABLE IF NOT EXISTS Country
 (
     id      INTEGER COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
     version INTEGER NOT NULL DEFAULT 0 COMMENT 'Служебное поле hibernate',
-    citizenship_code    INTEGER NOT NULL UNIQUE COMMENT 'Код',
+    citizenship_code    INTEGER NOT NULL COMMENT 'Код' UNIQUE,
     name    VARCHAR(25) COMMENT 'Наименование'
 );
 COMMENT ON TABLE Country IS 'Страна';

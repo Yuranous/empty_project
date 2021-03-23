@@ -6,11 +6,11 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -19,8 +19,7 @@ import javax.persistence.Version;
 public class Document implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "user_id")
     private Long id;
 
     /**
@@ -41,6 +40,10 @@ public class Document implements Serializable {
     @Column(name = "date", columnDefinition = "DATE")
     private LocalDate date;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    private User user;
+
     /**
      * Тип
      */
@@ -48,16 +51,8 @@ public class Document implements Serializable {
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
-            },
-            fetch = FetchType.LAZY
+            }
     )
     @JoinColumn(name = "doc_type_id")
     private DocumentType type;
-
-    /**
-     * Конструктор для hibernate
-     */
-    public Document() {
-
-    }
 }

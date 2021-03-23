@@ -83,10 +83,4 @@ public class Office {
             fetch = FetchType.LAZY
     )
     private Set<User> users;
-
-    /**
-     * Конструктор для hibernate
-     */
-    public Office() {
-    }
 }

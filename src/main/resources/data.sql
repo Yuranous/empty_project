@@ -48,18 +48,18 @@ INSERT INTO Office (name, phone, address, is_active, org_id)
 VALUES ('Мир', '4990835628', 'б. Новинский, 32', true, 1);
 
 --Вставка документов
-INSERT INTO Document (doc_type_id, number, date)
-VALUES (10, '555555555555', CURRENT_DATE());
-INSERT INTO Document (doc_type_id, number, date)
-VALUES (10, '444444444444', CURRENT_DATE());
+INSERT INTO Document (user_id, doc_type_id, number, date)
+VALUES (1, 10, '555555555555', CURRENT_DATE());
+INSERT INTO Document (user_id, doc_type_id, number, date)
+VALUES (2, 10, '444444444444', CURRENT_DATE());
 
 --Вставка пользователей
 INSERT INTO User (office_id, first_name, second_name, middle_name,
-                  position, doc_id, phone, country_id, is_identified)
-VALUES (1, 'Геннадий', 'Геннадиевич', 'Горин', 'Менеджер', 1, '9995553535', 1, true);
+                  position, phone, country_id, is_identified)
+VALUES (1, 'Геннадий', 'Геннадиевич', 'Горин', 'Менеджер', '9995553535', 1, true);
 INSERT INTO User (office_id, first_name, second_name, middle_name,
-                  position, doc_id, country_id, is_identified)
-VALUES (1, 'Цветогор', 'Грайрович', 'Петрухин', 'Аналитик', 2, 1, true);
+                  position, country_id, is_identified)
+VALUES (1, 'Цветогор', 'Грайрович', 'Петрухин', 'Аналитик', 1, true);
 
 INSERT INTO User (office_id, first_name, position)
 VALUES (3, 'Лесоруб', 'Разработчик');

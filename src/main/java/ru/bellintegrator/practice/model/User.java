@@ -92,9 +92,9 @@ public class User {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
             },
-            fetch = FetchType.LAZY
+            fetch = FetchType.LAZY,
+            mappedBy = "user"
     )
-    @JoinColumn(name = "doc_id")
     private Document document;
 
     /**
@@ -109,11 +109,4 @@ public class User {
     )
     @JoinColumn(name = "country_id")
     private Country country;
-
-    /**
-     * Конструктор для hibernate
-     */
-    public User() {
-
-    }
 }

@@ -85,11 +85,4 @@ public class Organization {
             fetch = FetchType.LAZY
     )
     private Set<Office> offices;
-
-    /**
-     * Конструктор для hibernate
-     */
-    public Organization() {
-
-    }
 }

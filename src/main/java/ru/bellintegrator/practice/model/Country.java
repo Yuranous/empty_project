@@ -41,11 +41,4 @@ public class Country implements Serializable {
      */
     @Column(name = "name", length = 25)
     private String name;
-
-    /**
-     * Конструктор для hibernate
-     */
-    public Country() {
-
-    }
 }

@@ -16,7 +16,7 @@ COMMENT ON TABLE Document_type IS 'Тип документа';
 
 CREATE TABLE IF NOT EXISTS Document
 (
-    id         INTEGER COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
+    user_id         INTEGER COMMENT 'Уникальный идентификатор (владельца)' PRIMARY KEY,
     version    INTEGER NOT NULL DEFAULT 0 COMMENT 'Служебное поле hibernate',
     doc_type_id  INTEGER COMMENT 'Тип',
     CONSTRAINT fk_user_doc_type FOREIGN KEY (doc_type_id)
@@ -75,9 +75,6 @@ CREATE TABLE IF NOT EXISTS User
     middle_name      VARCHAR(25) COMMENT 'Отчество',
     position         VARCHAR(25) NOT NULL COMMENT 'Должнсть',
     phone            CHAR(10) COMMENT 'Номер телефона',
-    doc_id           INTEGER COMMENT 'Документ',
-    CONSTRAINT fk_user_doc FOREIGN KEY (doc_id)
-        REFERENCES Document (id),
     country_id INTEGER COMMENT 'Код страны',
     CONSTRAINT fk_user_citizenship_code FOREIGN KEY (country_id)
         REFERENCES Country (id),

@@ -37,11 +37,4 @@ public class DocumentType implements Serializable {
      */
     @Column(name = "name", length = 150)
     private String name;
-
-    /**
-     * Конструктор для hibernate
-     */
-    public DocumentType() {
-
-    }
 }

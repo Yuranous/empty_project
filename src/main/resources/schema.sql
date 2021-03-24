@@ -7,9 +7,8 @@ DROP TABLE IF EXISTS Country;
 
 CREATE TABLE IF NOT EXISTS Document_type
 (
-    id      INTEGER COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
+    code      INTEGER COMMENT 'Уникальный идентификатор (код)' PRIMARY KEY,
     version INTEGER NOT NULL DEFAULT 0 COMMENT 'Служебное поле hibernate',
-    code    INTEGER NOT NULL COMMENT 'Код' UNIQUE,
     name    VARCHAR(150) COMMENT 'Наименование'
 );
 COMMENT ON TABLE Document_type IS 'Тип документа';
@@ -20,7 +19,7 @@ CREATE TABLE IF NOT EXISTS Document
     version    INTEGER NOT NULL DEFAULT 0 COMMENT 'Служебное поле hibernate',
     doc_type_id  INTEGER COMMENT 'Тип',
     CONSTRAINT fk_user_doc_type FOREIGN KEY (doc_type_id)
-        REFERENCES Document_type (id),
+        REFERENCES Document_type (code),
     number VARCHAR(25) COMMENT 'Номер',
     date   DATE COMMENT 'Дата выдачи'
 );

@@ -17,7 +17,7 @@ public class DocumentType implements Serializable {
 
     @Id
     @Column(name = "code")
-    private Long id;
+    private Long code;
 
     /**
      * Служебное поле hibernate

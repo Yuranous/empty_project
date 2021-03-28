@@ -1,19 +1,17 @@
 package ru.bellintegrator.practice.service.doctype;
 
 import java.util.List;
-import org.springframework.validation.annotation.Validated;
 import ru.bellintegrator.practice.view.DocumentTypeView;
 
 /**
- * Сервис справочника документов
+ * Сервис типов документов
  */
-@Validated
 public interface DocumentTypeService {
 
     /**
-     * Получить список документов из справочника
+     * Получить список типов документов из справочника
      *
-     * @return {@DocumentType}
+     * @return Список информации о типах документов
      */
     List<DocumentTypeView> docTypes();
 }

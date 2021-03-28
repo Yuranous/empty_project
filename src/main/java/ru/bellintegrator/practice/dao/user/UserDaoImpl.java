@@ -17,15 +17,24 @@ import ru.bellintegrator.practice.dao.specification.SearchCriteria;
 import ru.bellintegrator.practice.model.Office;
 import ru.bellintegrator.practice.model.User;
 
+/**
+ * {@inheritDoc}
+ */
 @Repository
 public class UserDaoImpl implements UserDao {
     private final EntityManager em;
 
+    /**
+     * {@inheritDoc}
+     */
     @Autowired
     public UserDaoImpl(EntityManager em) {
         this.em = em;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<User> findAll(List<SearchCriteria> params, Long officeId) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
@@ -47,6 +56,9 @@ public class UserDaoImpl implements UserDao {
         return em.createQuery(userOfficeCriteria).getResultList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<User> findById(Long id) {
         TypedQuery<User> typedQuery
@@ -54,17 +66,22 @@ public class UserDaoImpl implements UserDao {
         typedQuery.setParameter("id", id);
         try {
             return Optional.of(typedQuery.getSingleResult());
-        } catch(NoResultException e) {
+        } catch (NoResultException e) {
             return Optional.empty();
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void insert(User user) {
         em.persist(user);
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(User user) {
         em.merge(user);

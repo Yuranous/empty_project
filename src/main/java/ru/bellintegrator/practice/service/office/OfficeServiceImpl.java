@@ -81,6 +81,7 @@ public class OfficeServiceImpl implements OfficeService {
             return false;
         }
     }
+
     /**
      * {@inheritDoc}
      */

@@ -1,12 +1,9 @@
 package ru.bellintegrator.practice.controller.organization;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static ru.bellintegrator.practice.view.wrapper.ResponseWrapper.*;
+import static ru.bellintegrator.practice.wrapper.ResponseWrapper.getErrorResponse;
+import static ru.bellintegrator.practice.wrapper.ResponseWrapper.getSuccessResponse;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.bellintegrator.practice.dao.specification.SearchCriteria;
 import ru.bellintegrator.practice.service.organization.OrganizationService;
 import ru.bellintegrator.practice.view.OrganizationView;
-import ru.bellintegrator.practice.view.wrapper.ResponseWrapper;
+import ru.bellintegrator.practice.wrapper.ResponseWrapper;
 
-@Api(value = "OrganizationController")
 @RestController
 @RequestMapping(value = "/api/organization", produces = APPLICATION_JSON_VALUE)
 public class OrganizationController {
@@ -36,11 +32,6 @@ public class OrganizationController {
         this.service = organizationService;
     }
 
-    @ApiOperation(value = "Добавить новую организацию", httpMethod = "POST")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = String.class),
-            @ApiResponse(code = 404, message = "Not Found"),
-            @ApiResponse(code = 500, message = "Failure")})
     @PostMapping("/save")
     public ResponseWrapper addOrganization(@RequestBody OrganizationView organization) {
         if (organization.getName() == null || organization.getFullName() == null ||organization.getInn() == null ||
@@ -56,11 +47,6 @@ public class OrganizationController {
         }
     }
 
-    @ApiOperation(value = "Обновить организацию", httpMethod = "PUT")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = String.class),
-            @ApiResponse(code = 404, message = "Not Found"),
-            @ApiResponse(code = 500, message = "Failure")})
     @PutMapping("/update")
     public ResponseWrapper updateOrganization(@RequestBody OrganizationView organization) {
         if (organization.getId() == null || organization.getName() == null || organization.getFullName() == null ||organization.getInn() == null ||
@@ -76,7 +62,6 @@ public class OrganizationController {
         }
     }
 
-    @ApiOperation(value = "Получить список всех организаций", httpMethod = "GET")
     @GetMapping("/list")
     public ResponseWrapper organizations(
             @RequestParam String name,
@@ -105,7 +90,6 @@ public class OrganizationController {
         }
     }
 
-    @ApiOperation(value = "Получить организацию по идентификатору", httpMethod = "GET")
     @GetMapping("/{id}")
     public ResponseWrapper organization(@PathVariable Long id) {
         Optional<OrganizationView> result = service.organization(id);

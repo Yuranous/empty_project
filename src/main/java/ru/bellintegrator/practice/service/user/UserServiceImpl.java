@@ -33,7 +33,9 @@ public class UserServiceImpl implements UserService {
 
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, OfficeDao officeDao, CountryDao countryDao, DocumentTypeDao documentTypeDao, MapperFacade mapperFacade) {
+    public UserServiceImpl(UserDao userDao, OfficeDao officeDao,
+                           CountryDao countryDao, DocumentTypeDao documentTypeDao,
+                           MapperFacade mapperFacade) {
         this.userDao = userDao;
         this.officeDao = officeDao;
         this.countryDao = countryDao;
@@ -109,7 +111,7 @@ public class UserServiceImpl implements UserService {
                     if (view.getDocName() != null && view.getDocCode() != null) {
                         DocumentType type = new DocumentType();
                         type.setName(view.getDocName());
-                        type.setId(view.getDocCode());
+                        type.setCode(view.getDocCode());
                         typeOptional = Optional.of(type);
                     }
                 }
@@ -132,6 +134,7 @@ public class UserServiceImpl implements UserService {
             return false;
         }
     }
+
     /**
      * {@inheritDoc}
      */

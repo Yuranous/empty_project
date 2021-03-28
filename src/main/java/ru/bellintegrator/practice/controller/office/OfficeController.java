@@ -2,10 +2,6 @@ package ru.bellintegrator.practice.controller.office;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,12 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.bellintegrator.practice.wrapper.ResponseWrapper;
 import ru.bellintegrator.practice.dao.specification.SearchCriteria;
 import ru.bellintegrator.practice.service.office.OfficeService;
 import ru.bellintegrator.practice.view.OfficeView;
-import ru.bellintegrator.practice.view.wrapper.ResponseWrapper;
 
-@Api(value = "OfficeController")
 @RestController
 @RequestMapping(value = "/api/office", produces = APPLICATION_JSON_VALUE)
 public class OfficeController {
@@ -35,11 +30,6 @@ public class OfficeController {
         this.service = officeService;
     }
 
-    @ApiOperation(value = "Добавить новый офис", httpMethod = "POST")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = String.class),
-            @ApiResponse(code = 404, message = "Not Found"),
-            @ApiResponse(code = 500, message = "Failure")})
     @PostMapping("/save")
     public ResponseWrapper addOffice(@RequestBody OfficeView office) {
         if (office.getOrgId() == null) {
@@ -50,11 +40,6 @@ public class OfficeController {
         }
     }
 
-    @ApiOperation(value = "Обновить организацию", httpMethod = "PUT")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = String.class),
-            @ApiResponse(code = 404, message = "Not Found"),
-            @ApiResponse(code = 500, message = "Failure")})
     @PutMapping("/update")
     public ResponseWrapper updateOffice(@RequestBody OfficeView office) {
         if (office.getId() == null || office.getName() == null || office.getAddress() == null) {
@@ -68,7 +53,6 @@ public class OfficeController {
         }
     }
 
-    @ApiOperation(value = "Получить список всех организаций", httpMethod = "GET")
     @GetMapping("/list")
     public ResponseWrapper offices(
             @RequestParam(required = false) String name,
@@ -109,7 +93,6 @@ public class OfficeController {
         }
     }
 
-    @ApiOperation(value = "Получить организацию по идентификатору", httpMethod = "GET")
     @GetMapping("/{id}")
     public ResponseWrapper office(@PathVariable Long id) {
         Optional<OfficeView> result = service.office(id);

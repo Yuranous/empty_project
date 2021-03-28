@@ -15,6 +15,9 @@ import ru.bellintegrator.practice.dao.specification.BaseQueryCriteriaConsumer;
 import ru.bellintegrator.practice.dao.specification.SearchCriteria;
 import ru.bellintegrator.practice.model.Office;
 
+/**
+ * {@inheritDoc}
+ */
 @Repository
 public class OfficeDaoImpl implements OfficeDao {
 
@@ -25,6 +28,9 @@ public class OfficeDaoImpl implements OfficeDao {
         this.em = em;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Office> findAll(List<SearchCriteria> params) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
@@ -42,6 +48,9 @@ public class OfficeDaoImpl implements OfficeDao {
         return em.createQuery(query).getResultList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Office> findById(Long id) {
         TypedQuery<Office> typedQuery
@@ -54,12 +63,17 @@ public class OfficeDaoImpl implements OfficeDao {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void insert(Office office) {
         em.persist(office);
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(Office office) {
         em.merge(office);

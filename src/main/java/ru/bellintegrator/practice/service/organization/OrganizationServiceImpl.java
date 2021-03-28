@@ -61,6 +61,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         dao.insert(organization);
         return true;
     }
+
     /**
      * {@inheritDoc}
      */

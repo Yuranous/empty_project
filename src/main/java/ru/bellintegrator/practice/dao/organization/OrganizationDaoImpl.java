@@ -15,6 +15,9 @@ import ru.bellintegrator.practice.dao.specification.BaseQueryCriteriaConsumer;
 import ru.bellintegrator.practice.dao.specification.SearchCriteria;
 import ru.bellintegrator.practice.model.Organization;
 
+/**
+ * {@inheritDoc}
+ */
 @Repository
 public class OrganizationDaoImpl implements OrganizationDao {
 
@@ -25,6 +28,9 @@ public class OrganizationDaoImpl implements OrganizationDao {
         this.em = em;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Organization> findAll(List<SearchCriteria> params) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
@@ -42,6 +48,9 @@ public class OrganizationDaoImpl implements OrganizationDao {
         return em.createQuery(query).getResultList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Organization> findById(Long id) {
         TypedQuery<Organization> typedQuery
@@ -49,16 +58,22 @@ public class OrganizationDaoImpl implements OrganizationDao {
         typedQuery.setParameter("id", id);
         try {
             return Optional.of(typedQuery.getSingleResult());
-        } catch(NoResultException e) {
+        } catch (NoResultException e) {
             return Optional.empty();
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void insert(Organization organization) {
         em.persist(organization);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(Organization organization) {
         em.merge(organization);

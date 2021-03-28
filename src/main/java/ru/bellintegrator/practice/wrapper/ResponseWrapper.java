@@ -1,4 +1,4 @@
-package ru.bellintegrator.practice.view.wrapper;
+package ru.bellintegrator.practice.wrapper;
 
 import ru.bellintegrator.practice.view.ErrorView;
 

@@ -2,15 +2,13 @@ package ru.bellintegrator.practice.controller.doctype;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bellintegrator.practice.service.doctype.DocumentTypeService;
-import ru.bellintegrator.practice.view.DocumentTypeView;
+import ru.bellintegrator.practice.view.doctype.DocumentTypeView;
 
 @RestController
 @RequestMapping(value = "/api/docs", produces = APPLICATION_JSON_VALUE)
@@ -24,12 +22,7 @@ public class DocumentTypeController {
     }
 
     @GetMapping
-    public Map<String, List<DocumentTypeView>> countries() {
-        Map<String, List<DocumentTypeView>> result = new HashMap<>();
-        List<DocumentTypeView> docTypes = service.docTypes();
-        if (!docTypes.isEmpty()) {
-            result.put("data", docTypes);
-        }
-        return result;
+    public List<DocumentTypeView> docTypes() {
+        return service.getAllDocTypes();
     }
 }

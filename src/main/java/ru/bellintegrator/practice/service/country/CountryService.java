@@ -1,7 +1,7 @@
 package ru.bellintegrator.practice.service.country;
 
 import java.util.List;
-import ru.bellintegrator.practice.view.CountryView;
+import ru.bellintegrator.practice.view.country.CountryView;
 
 /**
  * Сервис справочника стран
@@ -13,5 +13,5 @@ public interface CountryService {
      *
      * @return Список информации о странах
      */
-    List<CountryView> countries();
+    List<CountryView> getAllCountries();
 }

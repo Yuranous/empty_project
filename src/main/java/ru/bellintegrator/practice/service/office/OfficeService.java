@@ -1,9 +1,14 @@
 package ru.bellintegrator.practice.service.office;
 
 import java.util.List;
-import java.util.Optional;
+import ru.bellintegrator.practice.exceptions.DataNotFoundException;
+import ru.bellintegrator.practice.exceptions.SaveException;
+import ru.bellintegrator.practice.exceptions.UpdateException;
 import ru.bellintegrator.practice.dao.specification.SearchCriteria;
-import ru.bellintegrator.practice.view.OfficeView;
+import ru.bellintegrator.practice.view.office.OfficeListItemView;
+import ru.bellintegrator.practice.view.office.OfficeSaveView;
+import ru.bellintegrator.practice.view.office.OfficeUpdateView;
+import ru.bellintegrator.practice.view.office.OfficeView;
 
 /**
  * Сервис офисов
@@ -17,7 +22,7 @@ public interface OfficeService {
      *
      * @return Список информации об офисах
      */
-    List<OfficeView> offices(List<SearchCriteria> params);
+    List<OfficeListItemView> finAllBySearchCriteria(List<SearchCriteria> params);
 
     /**
      * Получить офис по идентификатору
@@ -26,7 +31,7 @@ public interface OfficeService {
      *
      * @return Информацию об офисе
      */
-    Optional<OfficeView> office(Long id);
+    OfficeView findById(Long id) throws DataNotFoundException;
 
     /**
      * Сохранить организацию
@@ -35,14 +40,13 @@ public interface OfficeService {
      *
      * @return Статус процесса
      */
-    boolean add(OfficeView office);
+    void save(OfficeSaveView office) throws SaveException;
 
     /**
      * Обновить организацию
      *
      * @param office информация об офисе, который необходимо обновить
      *
-     * @return Статус процесса
      */
-    boolean update(OfficeView office);
+    void update(OfficeUpdateView office) throws UpdateException;
 }

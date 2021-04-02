@@ -1,5 +1,10 @@
-package ru.bellintegrator.practice.view;
+package ru.bellintegrator.practice.view.country;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class CountryView {
 
     public String name;

@@ -1,22 +1,24 @@
-package ru.bellintegrator.practice.view;
+package ru.bellintegrator.practice.view.user;
 
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class UserView {
+public class UserSaveView {
 
-    public Long id;
+    @NotNull(message = "Firstname value is required")
+    public Long officeId;
 
+    @NotNull(message = "Firstname value is required")
     public String firstName;
 
     public String secondName;
 
     public String middleName;
 
-    public Long officeId;
-
+    @NotNull(message = "Position value is required")
     public String position;
 
     public String phone;
@@ -35,10 +37,10 @@ public class UserView {
 
     @Override
     public String toString() {
-        return "{firstName:" + firstName + "," +
+        return  "officeId:" + officeId + "," +
+                "firstName:" + firstName + "," +
                 "secondName:" + secondName + "," +
                 "middleName:" + middleName + "," +
-                "officeId:" + officeId + "," +
                 "position:" + position + "," +
                 "phone:" + phone + "," +
                 "docName:" + docName + "," +

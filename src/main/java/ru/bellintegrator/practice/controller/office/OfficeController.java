@@ -4,7 +4,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,10 +14,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.bellintegrator.practice.wrapper.ResponseWrapper;
+import ru.bellintegrator.practice.exceptions.DataNotFoundException;
+import ru.bellintegrator.practice.exceptions.SaveException;
+import ru.bellintegrator.practice.exceptions.UpdateException;
 import ru.bellintegrator.practice.dao.specification.SearchCriteria;
 import ru.bellintegrator.practice.service.office.OfficeService;
-import ru.bellintegrator.practice.view.OfficeView;
+import ru.bellintegrator.practice.view.office.OfficeListItemView;
+import ru.bellintegrator.practice.view.office.OfficeSaveView;
+import ru.bellintegrator.practice.view.office.OfficeUpdateView;
+import ru.bellintegrator.practice.view.office.OfficeView;
 
 @RestController
 @RequestMapping(value = "/api/office", produces = APPLICATION_JSON_VALUE)
@@ -31,30 +36,17 @@ public class OfficeController {
     }
 
     @PostMapping("/save")
-    public ResponseWrapper addOffice(@RequestBody OfficeView office) {
-        if (office.getOrgId() == null) {
-            return ResponseWrapper.getErrorResponse("400", "OrgId value must be passed");
-        } else {
-            service.add(office);
-            return ResponseWrapper.getSuccessResponse("OK");
-        }
+    public void save(@RequestBody @Valid OfficeSaveView office) throws SaveException {
+        service.save(office);
     }
 
     @PutMapping("/update")
-    public ResponseWrapper updateOffice(@RequestBody OfficeView office) {
-        if (office.getId() == null || office.getName() == null || office.getAddress() == null) {
-            return ResponseWrapper.getErrorResponse("400", "id, name, address values must be pass");
-        } else {
-            if (service.update(office)) {
-                return ResponseWrapper.getSuccessResponse("OK");
-            } else {
-                return ResponseWrapper.getErrorResponse("400", "Error during updating");
-            }
-        }
+    public void update(@RequestBody @Valid OfficeUpdateView office) throws UpdateException {
+        service.update(office);
     }
 
     @GetMapping("/list")
-    public ResponseWrapper offices(
+    public List<OfficeListItemView> offices(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Long orgId,
             @RequestParam(required = false) String address,
@@ -84,23 +76,12 @@ public class OfficeController {
             params.add(new SearchCriteria("isActive", ":", isActive));
         }
 
-        List<OfficeView> offices = service.offices(params);
-
-        if (offices.isEmpty()) {
-            return ResponseWrapper.getErrorResponse("404", "No offices found");
-        } else {
-            return ResponseWrapper.getSuccessResponse(offices);
-        }
+        return service.finAllBySearchCriteria(params);
     }
 
     @GetMapping("/{id}")
-    public ResponseWrapper office(@PathVariable Long id) {
-        Optional<OfficeView> result = service.office(id);
-        if (result.isPresent()) {
-            return ResponseWrapper.getSuccessResponse(result.get());
-        } else {
-            return ResponseWrapper.getErrorResponse("404", "Can't find office with passed id value");
-        }
+    public OfficeView office(@PathVariable Long id) throws DataNotFoundException {
+        return service.findById(id);
     }
 }
 

@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.bellintegrator.practice.dao.doctype.DocumentTypeDao;
 import ru.bellintegrator.practice.model.DocumentType;
 import ru.bellintegrator.practice.model.mapper.MapperFacade;
-import ru.bellintegrator.practice.view.DocumentTypeView;
+import ru.bellintegrator.practice.view.doctype.DocumentTypeView;
 
 /**
  * {@inheritDoc}
@@ -29,7 +29,7 @@ public class DocumentTypeServiceImpl implements DocumentTypeService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<DocumentTypeView> docTypes() {
+    public List<DocumentTypeView> getAllDocTypes() {
         List<DocumentType> all = dao.findAll();
         return mapperFacade.mapAsList(all, DocumentTypeView.class);
     }

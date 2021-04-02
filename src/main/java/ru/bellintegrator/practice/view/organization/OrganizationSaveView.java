@@ -1,42 +1,38 @@
-package ru.bellintegrator.practice.view;
+package ru.bellintegrator.practice.view.organization;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.Setter;
 
+@Setter
 @Getter
-public class OrganizationView {
+public class OrganizationSaveView {
 
-    @NotEmpty
+    @NotNull(message = "ID value is required")
     public Long id;
 
-    @Size(max = 25)
-    @NotEmpty(message = "name cannot be null")
+    @NotNull(message = "Name value is required")
     public String name;
 
-    @Size(max = 25)
-    @NotEmpty(message = "full_name cannot be null")
+    @NotNull(message = "Fullname value is required")
     public String fullName;
 
-    @Size(max = 12)
-    @NotEmpty(message = "inn cannot be null")
+    @NotNull(message = "INN value is required")
     public String inn;
 
-    @Size(max = 9)
-    @NotEmpty(message = "kpp cannot be null")
+    @NotNull(message = "KPP value is required")
     public String kpp;
 
-    @Size(max = 50)
+    @NotNull(message = "Address value is required")
     public String address;
 
-    @Size(max = 10)
     public String phone;
 
     public Boolean isActive;
 
     @Override
     public String toString() {
-        return "{name:" + name + "," +
+        return  "{name:" + name + "," +
                 "fullName:" + fullName + "," +
                 "inn:" + inn + "," +
                 "kpp:" + kpp + "," +

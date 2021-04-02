@@ -2,17 +2,22 @@ package ru.bellintegrator.practice.service.office;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.bellintegrator.practice.exceptions.DataNotFoundException;
+import ru.bellintegrator.practice.exceptions.SaveException;
+import ru.bellintegrator.practice.exceptions.UpdateException;
 import ru.bellintegrator.practice.dao.office.OfficeDao;
 import ru.bellintegrator.practice.dao.organization.OrganizationDao;
 import ru.bellintegrator.practice.dao.specification.SearchCriteria;
 import ru.bellintegrator.practice.model.Office;
 import ru.bellintegrator.practice.model.Organization;
 import ru.bellintegrator.practice.model.mapper.MapperFacade;
-import ru.bellintegrator.practice.view.OfficeView;
+import ru.bellintegrator.practice.view.office.OfficeListItemView;
+import ru.bellintegrator.practice.view.office.OfficeSaveView;
+import ru.bellintegrator.practice.view.office.OfficeUpdateView;
+import ru.bellintegrator.practice.view.office.OfficeView;
 
 /**
  * {@inheritDoc}
@@ -34,60 +39,55 @@ public class OfficeServiceImpl implements OfficeService {
 
     /**
      * {@inheritDoc}
+     * @return
      */
     @Override
     @Transactional(readOnly = true)
-    public List<OfficeView> offices(List<SearchCriteria> params) {
-        List<Office> all = officeDao.findAll(params);
-        return all.stream().map(office -> {
-            Long orgId = office.getOrganization().getId();
-            OfficeView res = mapperFacade.map(office, OfficeView.class);
-            res.setOrgId(orgId);
-            return res;
-        }).collect(Collectors.toList());
+    public List<OfficeListItemView> finAllBySearchCriteria(List<SearchCriteria> params) {
+        List<Office> all = officeDao.findAllBySearchCriteria(params);
+        return mapperFacade.mapAsList(all, OfficeListItemView.class);
     }
 
     /**
      * {@inheritDoc}
+     * @return
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<OfficeView> office(Long id) {
+    public OfficeView findById(Long id) throws DataNotFoundException {
         Optional<Office> result = officeDao.findById(id);
         if (result.isPresent()) {
             Office office = result.get();
-            Long orgId = office.getOrganization().getId();
-            OfficeView view = mapperFacade.map(office, OfficeView.class);
-            view.setOrgId(orgId);
-            return Optional.of(view);
+            return mapperFacade.map(office, OfficeView.class);
         } else {
-            return Optional.empty();
+            throw new DataNotFoundException("No office with this id was found");
         }
     }
 
     /**
      * {@inheritDoc}
+     * @param view
      */
     @Transactional
     @Override
-    public boolean add(OfficeView view) {
+    public void save(OfficeSaveView view) throws SaveException {
         Office office = mapperFacade.map(view, Office.class);
         Optional<Organization> organization = organizationDao.findById(view.getOrgId());
         if (organization.isPresent()) {
             office.setOrganization(organization.get());
             officeDao.insert(office);
-            return true;
         } else {
-            return false;
+            throw new SaveException("There is no organization with passed id. Check OrgId value");
         }
     }
 
     /**
      * {@inheritDoc}
+     * @param office
      */
     @Transactional
     @Override
-    public boolean update(OfficeView office) {
+    public void update(OfficeUpdateView office) throws UpdateException {
         Optional<Office> source = officeDao.findById(office.getId());
 
         if (source.isPresent()) {
@@ -100,9 +100,8 @@ public class OfficeServiceImpl implements OfficeService {
             }
 
             officeDao.update(src);
-
-            return true;
+        } else {
+            throw new UpdateException("There is no office with passed id. Check id value");
         }
-        return false;
     }
 }

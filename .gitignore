@@ -36,7 +36,6 @@ bin/
 .externalToolBuilders
 .eclipse-pmd
 .org.eclipse.*.prefs
-bin/
 #
 #
 # ---------------------------------------------------------------------

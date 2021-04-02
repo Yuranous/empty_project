@@ -3,10 +3,12 @@ package ru.bellintegrator.practice.service.user;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.bellintegrator.practice.exceptions.DataNotFoundException;
+import ru.bellintegrator.practice.exceptions.SaveException;
+import ru.bellintegrator.practice.exceptions.UpdateException;
 import ru.bellintegrator.practice.dao.country.CountryDao;
 import ru.bellintegrator.practice.dao.doctype.DocumentTypeDao;
 import ru.bellintegrator.practice.dao.office.OfficeDao;
@@ -18,7 +20,10 @@ import ru.bellintegrator.practice.model.DocumentType;
 import ru.bellintegrator.practice.model.Office;
 import ru.bellintegrator.practice.model.User;
 import ru.bellintegrator.practice.model.mapper.MapperFacade;
-import ru.bellintegrator.practice.view.UserView;
+import ru.bellintegrator.practice.view.user.UserListItemView;
+import ru.bellintegrator.practice.view.user.UserSaveView;
+import ru.bellintegrator.practice.view.user.UserUpdateView;
+import ru.bellintegrator.practice.view.user.UserView;
 
 /**
  * {@inheritDoc}
@@ -45,102 +50,93 @@ public class UserServiceImpl implements UserService {
 
     /**
      * {@inheritDoc}
+     * @return
      */
     @Override
     @Transactional(readOnly = true)
-    public List<UserView> users(List<SearchCriteria> params, Long officeId) {
+    public List<UserListItemView> findAllUsersBySearchCriteria(List<SearchCriteria> params, Long officeId) {
         List<User> all = userDao.findAll(params, officeId);
-        return all.stream().map(user -> {
-            UserView res = mapperFacade.map(user, UserView.class);
-            res.setOfficeId(user.getOffice().getId());
-            Optional<Document> userDocument = Optional.ofNullable(user.getDocument());
-            if (userDocument.isPresent()) {
-                Document doc = userDocument.get();
-                res.setDocName(doc.getType().getName());
-                if (doc.getDate() != null) {
-                    res.setDocDate(doc.getDate().toString());
-                }
-                res.setDocNumber(doc.getNumber());
-            }
-            if (user.getCountry() != null) {
-                res.setCitizenshipCode(user.getCountry().getCitizenshipCode());
-            }
-            return res;
-        }).collect(Collectors.toList());
+        return mapperFacade.mapAsList(all, UserListItemView.class);
     }
 
     /**
      * {@inheritDoc}
+     * @return
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<UserView> user(Long id) {
+    public UserView findById(Long id) throws DataNotFoundException {
         Optional<User> result = userDao.findById(id);
         if (result.isPresent()) {
             User user = result.get();
             UserView view = mapperFacade.map(user, UserView.class);
-            view.setOfficeId(user.getOffice().getId());
             Document doc = user.getDocument();
             view.setDocName(doc.getType().getName());
             if (doc.getDate() != null) {
                 view.setDocDate(doc.getDate().toString());
             }
-            view.setDocNumber(doc.getNumber());
-            view.setCitizenshipCode(user.getCountry().getCitizenshipCode());
-            return Optional.of(view);
+            if (doc.getNumber() != null) {
+                view.setDocNumber(doc.getNumber());
+            }
+
+            Country country = user.getCountry();
+            if (country != null) {
+                view.setCitizenshipCode(country.getCitizenshipCode());
+                view.setCitizenshipName(country.getName());
+            }
+
+            return view;
         } else {
-            return Optional.empty();
+            throw new DataNotFoundException("No user with this id was found");
         }
     }
 
     /**
      * {@inheritDoc}
+     * @param view
      */
     @Transactional
     @Override
-    public boolean add(UserView view) {
+    public void save(UserSaveView view) throws SaveException {
         User user = mapperFacade.map(view, User.class);
         Optional<Office> office = officeDao.findById(view.getOfficeId());
         if (office.isPresent()) {
             user.setOffice(office.get());
-            if (view.getDocCode() != null || view.getDocName() != null || view.getDocNumber() != null || view.getDocDate() != null) {
+            if (view.getDocCode() != null && view.getDocName() != null && view.getDocNumber() != null && view.getDocDate() != null) {
                 Document document = new Document();
                 document.setId(user.getId());
                 Optional<DocumentType> typeOptional = documentTypeDao.findById(view.getDocCode());
-                if (!typeOptional.isPresent()) {
-                    if (view.getDocName() != null && view.getDocCode() != null) {
-                        DocumentType type = new DocumentType();
-                        type.setName(view.getDocName());
-                        type.setCode(view.getDocCode());
-                        typeOptional = Optional.of(type);
-                    }
-                }
 
-                typeOptional.ifPresent(document::setType);
+                document.setType(typeOptional.orElseThrow(() ->
+                        new SaveException("No documentType with this code was found")
+                ));
 
-                if (view.getDocNumber() != null) {
-                    document.setNumber(view.getDocNumber());
-                }
-                if (view.getDocDate() != null) {
-                    document.setDate(LocalDate.parse(view.getDocDate()));
-                }
+                document.setNumber(view.getDocNumber());
+                document.setDate(LocalDate.parse(view.getDocDate()));
 
                 user.setDocument(document);
                 document.setUser(user);
             }
-            userDao.update(user);
-            return true;
+
+            if (view.getCitizenshipCode() != null) {
+                Optional<Country> country = countryDao.findByCitizenshipCode(view.getCitizenshipCode());
+                user.setCountry(country.orElseThrow(() ->
+                        new SaveException("No country with this citizenship code was found"))
+                );
+            }
+            userDao.insert(user);
         } else {
-            return false;
+            throw new SaveException("No office with this id was found");
         }
     }
 
     /**
      * {@inheritDoc}
+     * @param user
      */
     @Transactional
     @Override
-    public boolean update(UserView user) {
+    public void update(UserUpdateView user) throws UpdateException {
         Optional<User> source = userDao.findById(user.getId());
         if (source.isPresent()) {
             User src = source.get();
@@ -178,9 +174,8 @@ public class UserServiceImpl implements UserService {
             }
 
             userDao.update(src);
-
-            return true;
+        } else {
+            throw new UpdateException("No user for this id was found");
         }
-        return false;
     }
 }

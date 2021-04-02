@@ -1,9 +1,14 @@
 package ru.bellintegrator.practice.service.user;
 
 import java.util.List;
-import java.util.Optional;
+import ru.bellintegrator.practice.exceptions.DataNotFoundException;
+import ru.bellintegrator.practice.exceptions.SaveException;
+import ru.bellintegrator.practice.exceptions.UpdateException;
 import ru.bellintegrator.practice.dao.specification.SearchCriteria;
-import ru.bellintegrator.practice.view.UserView;
+import ru.bellintegrator.practice.view.user.UserListItemView;
+import ru.bellintegrator.practice.view.user.UserSaveView;
+import ru.bellintegrator.practice.view.user.UserUpdateView;
+import ru.bellintegrator.practice.view.user.UserView;
 
 /**
  * Сервис пользователей
@@ -18,7 +23,7 @@ public interface UserService {
      *
      * @return Список информации о пользователях
      */
-    List<UserView> users(List<SearchCriteria> params, Long officeId);
+    List<UserListItemView> findAllUsersBySearchCriteria(List<SearchCriteria> params, Long officeId);
 
     /**
      * Получить пользователя по идентификатору
@@ -27,23 +32,21 @@ public interface UserService {
      *
      * @return Информацию по пользователе
      */
-    Optional<UserView> user(Long id);
+    UserView findById(Long id) throws DataNotFoundException;
 
     /**
      * Сохранить пользователя
      *
      * @param user информация о новом пользователе
      *
-     * @return Статус процесса
      */
-    boolean add(UserView user);
+    void save(UserSaveView user) throws SaveException;
 
     /**
      * Обновить пользователя
      *
      * @param user информация о пользователе, которого необходимо обновить
      *
-     * @return Статус процесса
      */
-    boolean update(UserView user);
+    void update(UserUpdateView user) throws UpdateException;
 }

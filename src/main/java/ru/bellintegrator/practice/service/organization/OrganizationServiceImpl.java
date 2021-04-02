@@ -5,11 +5,16 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.bellintegrator.practice.exceptions.DataNotFoundException;
+import ru.bellintegrator.practice.exceptions.UpdateException;
 import ru.bellintegrator.practice.dao.organization.OrganizationDao;
 import ru.bellintegrator.practice.dao.specification.SearchCriteria;
 import ru.bellintegrator.practice.model.Organization;
 import ru.bellintegrator.practice.model.mapper.MapperFacade;
-import ru.bellintegrator.practice.view.OrganizationView;
+import ru.bellintegrator.practice.view.organization.OrganizationListItemView;
+import ru.bellintegrator.practice.view.organization.OrganizationSaveView;
+import ru.bellintegrator.practice.view.organization.OrganizationUpdateView;
+import ru.bellintegrator.practice.view.organization.OrganizationView;
 
 /**
  * {@inheritDoc}
@@ -28,26 +33,27 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     /**
      * {@inheritDoc}
+     * @return
      */
     @Override
     @Transactional(readOnly = true)
-    public List<OrganizationView> organizations(List<SearchCriteria> params) {
+    public List<OrganizationListItemView> findAllBySearchCriteria(List<SearchCriteria> params) {
         List<Organization> all = dao.findAll(params);
-        return mapperFacade.mapAsList(all, OrganizationView.class);
+        return mapperFacade.mapAsList(all, OrganizationListItemView.class);
     }
 
     /**
      * {@inheritDoc}
+     * @return
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<OrganizationView> organization(Long id) {
+    public OrganizationView findById(Long id) throws DataNotFoundException {
         Optional<Organization> result = dao.findById(id);
         if (result.isPresent()) {
-            OrganizationView view = mapperFacade.map(result.get(), OrganizationView.class);
-            return Optional.of(view);
+            return mapperFacade.map(result.get(), OrganizationView.class);
         } else {
-            return Optional.empty();
+            throw new DataNotFoundException("No organization with this id was found");
         }
     }
 
@@ -56,10 +62,9 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     @Transactional
     @Override
-    public boolean add(OrganizationView view) {
+    public void save(OrganizationSaveView view) {
         Organization organization = mapperFacade.map(view, Organization.class);
         dao.insert(organization);
-        return true;
     }
 
     /**
@@ -67,7 +72,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     @Transactional
     @Override
-    public boolean update(OrganizationView organization) {
+    public void update(OrganizationUpdateView organization) throws UpdateException {
         Optional<Organization> source = dao.findById(organization.getId());
 
         if (source.isPresent()) {
@@ -85,9 +90,8 @@ public class OrganizationServiceImpl implements OrganizationService {
             }
 
             dao.update(src);
-
-            return true;
+        } else {
+            throw new UpdateException("No organization with this id was found");
         }
-        return false;
     }
 }

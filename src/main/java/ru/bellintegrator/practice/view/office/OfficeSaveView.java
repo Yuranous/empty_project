@@ -1,17 +1,17 @@
-package ru.bellintegrator.practice.view;
+package ru.bellintegrator.practice.view.office;
 
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class OfficeView {
+public class OfficeSaveView {
 
-    public Long id;
+    @NotNull(message = "OrgId value is required")
+    public Long orgId;
 
     public String name;
-
-    public Long orgId;
 
     public String address;
 
@@ -21,13 +21,11 @@ public class OfficeView {
 
     @Override
     public String toString() {
-        return "{name:" + name + "," +
-                "orgId:" + orgId + "," +
+        return  "{orgId:" + orgId + "," +
+                "name:" + name + "," +
                 "address:" + address + "," +
                 "phone:" + phone + "," +
                 "isActive:" + isActive +
                 '}';
     }
 }
-
-//TODO: Проверить валидацию на контроллерах

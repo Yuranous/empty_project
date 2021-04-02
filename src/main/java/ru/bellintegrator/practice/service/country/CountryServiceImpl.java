@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.bellintegrator.practice.dao.country.CountryDao;
 import ru.bellintegrator.practice.model.Country;
 import ru.bellintegrator.practice.model.mapper.MapperFacade;
-import ru.bellintegrator.practice.view.CountryView;
+import ru.bellintegrator.practice.view.country.CountryView;
 
 /**
  * {@inheritDoc}
@@ -30,7 +30,7 @@ public class CountryServiceImpl implements CountryService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<CountryView> countries() {
+    public List<CountryView> getAllCountries() {
         List<Country> all = dao.findAll();
         return mapperFacade.mapAsList(all, CountryView.class);
     }

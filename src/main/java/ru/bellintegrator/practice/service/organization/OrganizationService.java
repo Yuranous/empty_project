@@ -1,9 +1,13 @@
 package ru.bellintegrator.practice.service.organization;
 
 import java.util.List;
-import java.util.Optional;
+import ru.bellintegrator.practice.exceptions.DataNotFoundException;
+import ru.bellintegrator.practice.exceptions.UpdateException;
 import ru.bellintegrator.practice.dao.specification.SearchCriteria;
-import ru.bellintegrator.practice.view.OrganizationView;
+import ru.bellintegrator.practice.view.organization.OrganizationListItemView;
+import ru.bellintegrator.practice.view.organization.OrganizationSaveView;
+import ru.bellintegrator.practice.view.organization.OrganizationUpdateView;
+import ru.bellintegrator.practice.view.organization.OrganizationView;
 
 /**
  * Сервис организаций
@@ -17,7 +21,7 @@ public interface OrganizationService {
      *
      * @return Список информации об организациях
      */
-    List<OrganizationView> organizations(List<SearchCriteria> params);
+    List<OrganizationListItemView> findAllBySearchCriteria(List<SearchCriteria> params);
 
     /**
      * Получить организацию по идентификатору
@@ -26,23 +30,21 @@ public interface OrganizationService {
      *
      * @return Информацию об организации
      */
-    Optional<OrganizationView> organization(Long id);
+    OrganizationView findById(Long id) throws DataNotFoundException;
 
     /**
      * Сохранить организацию
      *
      * @param organization информация о новой организации
      *
-     * @return Статус процесса
      */
-    boolean add(OrganizationView organization);
+    void save(OrganizationSaveView organization);
 
     /**
      * Обновить организацию
      *
      * @param organization информация об организации, которую необходимо обновить
      *
-     * @return Статус процесса
      */
-    boolean update(OrganizationView organization);
+    void update(OrganizationUpdateView organization) throws UpdateException;
 }

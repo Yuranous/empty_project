@@ -17,7 +17,7 @@ public interface OfficeDao {
      *
      * @return Список офисов
      */
-    List<Office> findAll(List<SearchCriteria> params);
+    List<Office> findAllBySearchCriteria(List<SearchCriteria> params);
 
     /**
      * Получить офис

@@ -32,10 +32,10 @@ public class OfficeDaoImpl implements OfficeDao {
      * {@inheritDoc}
      */
     @Override
-    public List<Office> findAll(List<SearchCriteria> params) {
+    public List<Office> findAllBySearchCriteria(List<SearchCriteria> params) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<Office> query = builder.createQuery(Office.class);
-        Root r = query.from(Office.class);
+        Root<Office> r = query.from(Office.class);
 
         Predicate predicate = builder.conjunction();
 

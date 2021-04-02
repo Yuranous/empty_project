@@ -35,7 +35,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
     public List<Organization> findAll(List<SearchCriteria> params) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<Organization> query = builder.createQuery(Organization.class);
-        Root r = query.from(Organization.class);
+        Root<Organization> r = query.from(Organization.class);
 
         Predicate predicate = builder.conjunction();
 

@@ -47,12 +47,6 @@ VALUES ('Восход', '4950735692', 'п. Столярный, 10', true, 2);
 INSERT INTO Office (name, phone, address, is_active, org_id)
 VALUES ('Мир', '4990835628', 'б. Новинский, 32', true, 1);
 
---Вставка документов
-INSERT INTO Document (user_id, doc_type_id, number, date)
-VALUES (1, 10, '555555555555', CURRENT_DATE());
-INSERT INTO Document (user_id, doc_type_id, number, date)
-VALUES (2, 10, '444444444444', CURRENT_DATE());
-
 --Вставка пользователей
 INSERT INTO User (office_id, first_name, second_name, middle_name,
                   position, phone, country_id, is_identified)
@@ -63,3 +57,9 @@ VALUES (1, 'Цветогор', 'Грайрович', 'Петрухин', 'Ана
 
 INSERT INTO User (office_id, first_name, position)
 VALUES (3, 'Лесоруб', 'Разработчик');
+
+--Вставка документов
+INSERT INTO Document (user_id, doc_type_id, number, date)
+VALUES (1, 10, '555555555555', CURRENT_DATE());
+INSERT INTO Document (user_id, doc_type_id, number, date)
+VALUES (2, 10, '444444444444', CURRENT_DATE());

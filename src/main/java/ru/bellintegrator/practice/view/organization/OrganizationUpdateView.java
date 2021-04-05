@@ -13,13 +13,15 @@ public class OrganizationUpdateView {
     public Long id;
 
     @NotNull(message = "Name value is required")
+    @Size(max = 25)
     public String name;
 
     @NotNull(message = "Fullname value is required")
+    @Size(max = 250)
     public String fullName;
 
     @NotNull(message = "INN value is required")
-    @Size(min = 12, max = 12, message = "KPP must consist of 12 digits")
+    @Size(min = 12, max = 12, message = "INN must consist of 12 digits")
     public String inn;
 
     @NotNull(message = "KPP value is required")
@@ -27,8 +29,10 @@ public class OrganizationUpdateView {
     public String kpp;
 
     @NotNull(message = "Address value is required")
+    @Size(max = 50, message = "Address must be no longer than 50 letters")
     public String address;
 
+    @Size(min = 10, max = 10, message = "Phone must consist of 10 digits")
     public String phone;
 
     public Boolean isActive;

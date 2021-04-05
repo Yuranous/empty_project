@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class UserSaveView {
 
-    @NotNull(message = "Firstname value is required")
+    @NotNull(message = "OfficeId value is required")
     public Long officeId;
 
     @NotNull(message = "Firstname value is required")

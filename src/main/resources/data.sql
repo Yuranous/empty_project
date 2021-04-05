@@ -50,10 +50,10 @@ VALUES ('Мир', '4990835628', 'б. Новинский, 32', true, 1);
 --Вставка пользователей
 INSERT INTO User (office_id, first_name, second_name, middle_name,
                   position, phone, country_id, is_identified)
-VALUES (1, 'Геннадий', 'Геннадиевич', 'Горин', 'Менеджер', '9995553535', 1, true);
+VALUES (1, 'Геннадий', 'Горин', 'Геннадиевич', 'Менеджер', '9995553535', 1, true);
 INSERT INTO User (office_id, first_name, second_name, middle_name,
                   position, country_id, is_identified)
-VALUES (1, 'Цветогор', 'Грайрович', 'Петрухин', 'Аналитик', 1, true);
+VALUES (1, 'Цветогор', 'Петрухин', 'Грайрович', 'Аналитик', 1, true);
 
 INSERT INTO User (office_id, first_name, position)
 VALUES (3, 'Лесоруб', 'Разработчик');

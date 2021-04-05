@@ -52,7 +52,7 @@ public class OrganizationController {
             @RequestParam(required = false) Boolean isActive
     ) {
 
-        List<SearchCriteria> params = new ArrayList<SearchCriteria>();
+        List<SearchCriteria> params = new ArrayList<>();
 
         params.add(new SearchCriteria("name", ":", name));
 

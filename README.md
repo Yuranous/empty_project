@@ -3,7 +3,7 @@
 git - https://github.com/azEsm/empty_project
 
 # Для запуска необходимо установить следующее ПО
-- JDK 8 и новее
+- JDK 8
 - Maven
 # Установка JDK
 https://www.oracle.com/ru/java/technologies/javase-downloads.html

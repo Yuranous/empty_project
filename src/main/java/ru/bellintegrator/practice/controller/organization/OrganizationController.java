@@ -2,7 +2,6 @@ package ru.bellintegrator.practice.controller.organization;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bellintegrator.practice.exceptions.DataNotFoundException;
 import ru.bellintegrator.practice.exceptions.SaveException;
 import ru.bellintegrator.practice.exceptions.UpdateException;
-import ru.bellintegrator.practice.dao.specification.SearchCriteria;
 import ru.bellintegrator.practice.service.organization.OrganizationService;
+import ru.bellintegrator.practice.view.organization.OrganizationListFilter;
 import ru.bellintegrator.practice.view.organization.OrganizationListItemView;
 import ru.bellintegrator.practice.view.organization.OrganizationSaveView;
 import ru.bellintegrator.practice.view.organization.OrganizationUpdateView;
@@ -45,26 +43,9 @@ public class OrganizationController {
         service.update(organization);
     }
 
-    @GetMapping("/list")
-    public List<OrganizationListItemView> organizations(
-            @RequestParam String name,
-            @RequestParam(required = false) String inn,
-            @RequestParam(required = false) Boolean isActive
-    ) {
-
-        List<SearchCriteria> params = new ArrayList<>();
-
-        params.add(new SearchCriteria("name", ":", name));
-
-        if (inn != null) {
-            params.add(new SearchCriteria("inn", ":", inn));
-        }
-
-        if (isActive != null) {
-            params.add(new SearchCriteria("isActive", ":", isActive));
-        }
-
-        return service.findAllBySearchCriteria(params);
+    @PostMapping("/list")
+    public List<OrganizationListItemView> organizations(@RequestBody @Valid OrganizationListFilter filter) {
+        return service.findAllByFilter(filter);
     }
 
     @GetMapping("/{id}")

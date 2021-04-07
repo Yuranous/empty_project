@@ -27,6 +27,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import ru.bellintegrator.practice.view.office.OfficeListFilter;
 import ru.bellintegrator.practice.view.office.OfficeSaveView;
 import ru.bellintegrator.practice.view.office.OfficeUpdateView;
 
@@ -42,7 +43,14 @@ public class OfficeControllerTest {
     @Test
     @Order(1)
     public void officesWithoutArguments_ShouldReturnFoundAllOfficeViewList() throws Exception {
-        mockMvc.perform(get("/api/office/list"))
+        OfficeListFilter office = new OfficeListFilter();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson = ow.writeValueAsString(office);
+        mockMvc.perform(post("/api/office/list")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(requestJson))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -54,8 +62,15 @@ public class OfficeControllerTest {
 
     @Test
     public void officesWithArguments_ShouldReturnFoundOfficeViewList() throws Exception {
-        mockMvc.perform(get("/api/office/list")
-                .param("name", "Восход"))
+        OfficeListFilter office = new OfficeListFilter();
+        office.setName("Восход");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson = ow.writeValueAsString(office);
+        mockMvc.perform(post("/api/office/list")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(requestJson))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -91,7 +106,7 @@ public class OfficeControllerTest {
                 .andDo(print())
                 .andExpect(result -> assertTrue(result.getResolvedException()
                         instanceof MethodArgumentNotValidException))
-        .andExpect(jsonPath("$.error").value("OrgId value is required"));
+                .andExpect(jsonPath("$.error").value("OrgId value is required"));
     }
 
     @Test
@@ -127,8 +142,9 @@ public class OfficeControllerTest {
                         .value(allOf(containsString("Address value is required"),
                                 containsString("ID value is required"),
                                 containsString("Name value is required"))
-                                ));
+                        ));
     }
+
     @Test
     public void officeUpdate_ShouldReturnResultOK() throws Exception {
         OfficeUpdateView office = new OfficeUpdateView();

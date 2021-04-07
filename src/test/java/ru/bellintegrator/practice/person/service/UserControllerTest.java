@@ -27,7 +27,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
+import ru.bellintegrator.practice.view.user.UserListFilter;
 import ru.bellintegrator.practice.view.user.UserSaveView;
 import ru.bellintegrator.practice.view.user.UserUpdateView;
 
@@ -41,19 +41,34 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void users_NoNameParameter_ShouldThrowException() throws Exception {
-        mockMvc.perform(get("/api/user/list"))
+    public void users_NoOfficeIdParameter_ShouldThrowException() throws Exception {
+        UserListFilter user = new UserListFilter();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson = ow.writeValueAsString(user);
+        mockMvc.perform(post("/api/user/list")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(requestJson))
                 .andExpect(result -> assertTrue(result.getResolvedException()
-                        instanceof MissingServletRequestParameterException))
+                        instanceof MethodArgumentNotValidException))
                 .andExpect(jsonPath("$.error")
-                        .value("Required Long parameter 'officeId' is not present"));
+                        .value("OfficeId value is required"));
     }
 
 
     @Test
     @Order(1)
     public void users_ShouldReturnFoundUserViewList() throws Exception {
-        mockMvc.perform(get("/api/user/list").param("officeId", "1"))
+        UserListFilter user = new UserListFilter();
+        user.setOfficeId(1L);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson = ow.writeValueAsString(user);
+        mockMvc.perform(post("/api/user/list")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(requestJson))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -77,7 +92,8 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.data.phone").value("9995553535"))
                 .andExpect(jsonPath("$.data.citizenshipName").value("Российская Федерация"))
                 .andExpect(jsonPath("$.data.citizenshipCode").value("634"))
-                .andExpect(jsonPath("$.data.docName").value("Паспорт иностранного гражданина"))
+                .andExpect(jsonPath("$.data.docName")
+                        .value("Паспорт гражданина Российской Федерации"))
                 .andExpect(jsonPath("$.data.docNumber").value("555555555555"))
                 .andExpect(jsonPath("$.data.position").value("Менеджер"));
     }
@@ -120,6 +136,7 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result").value("success"));
     }
+
     @Test
     public void userUpdateWithoutId_ShouldReturnError() throws Exception {
         UserUpdateView user = new UserUpdateView();
@@ -140,6 +157,7 @@ public class UserControllerTest {
                                 containsString("Position value is required"))
                         ));
     }
+
     @Test
     public void userUpdate_ShouldReturnResultOK() throws Exception {
         UserUpdateView user = new UserUpdateView();

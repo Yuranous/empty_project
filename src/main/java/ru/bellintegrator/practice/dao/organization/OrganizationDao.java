@@ -2,8 +2,8 @@ package ru.bellintegrator.practice.dao.organization;
 
 import java.util.List;
 import java.util.Optional;
-import ru.bellintegrator.practice.dao.specification.SearchCriteria;
 import ru.bellintegrator.practice.model.Organization;
+import ru.bellintegrator.practice.view.organization.OrganizationListFilter;
 
 /**
  * DAO организации
@@ -13,11 +13,10 @@ public interface OrganizationDao {
     /**
      * Получить список организаций
      *
-     * @param params список критериев для поиска организаций
      *
-     * @return Список организаций
+     * @param filter@return Список организаций
      */
-    List<Organization> findAll(List<SearchCriteria> params);
+    List<Organization> findAllByFilter(OrganizationListFilter filter);
 
     /**
      * Получить организацию

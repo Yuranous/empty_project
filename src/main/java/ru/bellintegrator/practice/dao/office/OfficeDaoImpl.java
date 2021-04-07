@@ -11,9 +11,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ru.bellintegrator.practice.dao.specification.BaseQueryCriteriaConsumer;
-import ru.bellintegrator.practice.dao.specification.SearchCriteria;
 import ru.bellintegrator.practice.model.Office;
+import ru.bellintegrator.practice.view.office.OfficeListFilter;
 
 /**
  * {@inheritDoc}
@@ -30,20 +29,37 @@ public class OfficeDaoImpl implements OfficeDao {
 
     /**
      * {@inheritDoc}
+     * @param filter
      */
     @Override
-    public List<Office> findAllBySearchCriteria(List<SearchCriteria> params) {
+    public List<Office> finAllByFilter(OfficeListFilter filter) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<Office> query = builder.createQuery(Office.class);
-        Root<Office> r = query.from(Office.class);
+        Root<Office> office = query.from(Office.class);
 
-        Predicate predicate = builder.conjunction();
+        if (filter.getName() != null) {
+            Predicate nameFilter = builder.equal(office.get("name"), filter.getName());
+            query.where(nameFilter);
+        }
 
-        BaseQueryCriteriaConsumer searchConsumer =
-                new BaseQueryCriteriaConsumer(predicate, builder, r);
-        params.forEach(searchConsumer);
-        predicate = searchConsumer.getPredicate();
-        query.where(predicate);
+        if (filter.getOrgId() != null) {
+            Predicate orgIdFilter = builder.equal(office.get("orgId"), filter.getOrgId());
+            query.where(orgIdFilter);
+        }
+
+        if (filter.getAddress() != null) {
+            Predicate addressFilter = builder.equal(office.get("address"), filter.getAddress());
+            query.where(addressFilter);
+        }
+        if (filter.getPhone() != null) {
+            Predicate phoneFilter = builder.equal(office.get("phone"), filter.getPhone());
+            query.where(phoneFilter);
+        }
+
+        if (filter.getIsActive() != null) {
+            Predicate isActiveFilter = builder.equal(office.get("isActive"), filter.getIsActive());
+            query.where(isActiveFilter);
+        }
 
         return em.createQuery(query).getResultList();
     }

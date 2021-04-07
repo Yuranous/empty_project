@@ -7,7 +7,8 @@ DROP TABLE IF EXISTS Country;
 
 CREATE TABLE IF NOT EXISTS Document_type
 (
-    code      INTEGER COMMENT 'Уникальный идентификатор (код)' PRIMARY KEY,
+    id      INTEGER COMMENT 'Уникальный идентификатор' PRIMARY KEY AUTO_INCREMENT,
+    code      INTEGER COMMENT 'Код документа' UNIQUE,
     version INTEGER NOT NULL DEFAULT 0 COMMENT 'Служебное поле hibernate',
     name    VARCHAR(150) COMMENT 'Наименование'
 );

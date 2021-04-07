@@ -2,8 +2,8 @@ package ru.bellintegrator.practice.dao.office;
 
 import java.util.List;
 import java.util.Optional;
-import ru.bellintegrator.practice.dao.specification.SearchCriteria;
 import ru.bellintegrator.practice.model.Office;
+import ru.bellintegrator.practice.view.office.OfficeListFilter;
 
 /**
  * DAO офиса
@@ -13,11 +13,10 @@ public interface OfficeDao {
     /**
      * Получить список офисов
      *
-     * @param params список критериев для поиска офисов
      *
-     * @return Список офисов
+     * @param filter@return Список офисов
      */
-    List<Office> findAllBySearchCriteria(List<SearchCriteria> params);
+    List<Office> finAllByFilter(OfficeListFilter filter);
 
     /**
      * Получить офис

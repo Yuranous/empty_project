@@ -3,7 +3,7 @@ package ru.bellintegrator.practice.service.organization;
 import java.util.List;
 import ru.bellintegrator.practice.exceptions.DataNotFoundException;
 import ru.bellintegrator.practice.exceptions.UpdateException;
-import ru.bellintegrator.practice.dao.specification.SearchCriteria;
+import ru.bellintegrator.practice.view.organization.OrganizationListFilter;
 import ru.bellintegrator.practice.view.organization.OrganizationListItemView;
 import ru.bellintegrator.practice.view.organization.OrganizationSaveView;
 import ru.bellintegrator.practice.view.organization.OrganizationUpdateView;
@@ -17,11 +17,10 @@ public interface OrganizationService {
     /**
      * Получить список организаций
      *
-     * @param params список критериев для пиоска организаций
      *
-     * @return Список информации об организациях
+     * @param filter@return Список информации об организациях
      */
-    List<OrganizationListItemView> findAllBySearchCriteria(List<SearchCriteria> params);
+    List<OrganizationListItemView> findAllByFilter(OrganizationListFilter filter);
 
     /**
      * Получить организацию по идентификатору

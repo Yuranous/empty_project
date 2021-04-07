@@ -12,10 +12,9 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ru.bellintegrator.practice.dao.specification.BaseQueryCriteriaConsumer;
-import ru.bellintegrator.practice.dao.specification.SearchCriteria;
 import ru.bellintegrator.practice.model.Office;
 import ru.bellintegrator.practice.model.User;
+import ru.bellintegrator.practice.view.user.UserListFilter;
 
 /**
  * {@inheritDoc}
@@ -34,26 +33,50 @@ public class UserDaoImpl implements UserDao {
 
     /**
      * {@inheritDoc}
+     * @param filter
      */
     @Override
-    public List<User> findAll(List<SearchCriteria> params, Long officeId) {
+    public List<User> findAllByFilter(UserListFilter filter) {
+
+
         CriteriaBuilder builder = em.getCriteriaBuilder();
-        CriteriaQuery<User> userOfficeCriteria = builder.createQuery(User.class);
-        Root<User> userOfficeRoot = userOfficeCriteria.from(User.class);
-        Join<User, Office> office = userOfficeRoot.join("office");
-        userOfficeCriteria.select(userOfficeRoot);
-        userOfficeCriteria.where(builder.equal(office.get("id"), officeId));
+        CriteriaQuery<User> query = builder.createQuery(User.class);
+        Root<User> user = query.from(User.class);
+        Join<User, Office> office = user.join("office");
 
-        Predicate predicate = builder.conjunction();
+        query.where(builder.equal(office.get("id"), filter.getOfficeId()));
 
-        BaseQueryCriteriaConsumer searchConsumer =
-                new BaseQueryCriteriaConsumer(predicate, builder, userOfficeRoot);
-        params.forEach(searchConsumer);
-        predicate = searchConsumer.getPredicate();
+        if (filter.getFirstName() != null) {
+            Predicate firstNameFilter = builder.equal(user.get("firstName"), filter.getFirstName());
+            query.where(firstNameFilter);
+        }
 
-        userOfficeCriteria.where(builder.and(builder.equal(office.get("id"), officeId), predicate));
+        if (filter.getSecondName() != null) {
+            Predicate secondNameFilter = builder.equal(user.get("secondName"), filter.getSecondName());
+            query.where(secondNameFilter);
+        }
 
-        return em.createQuery(userOfficeCriteria).getResultList();
+        if (filter.getMiddleName() != null) {
+            Predicate middleNameFilter = builder.equal(user.get("middleName"), filter.getMiddleName());
+            query.where(middleNameFilter);
+        }
+
+        if (filter.getPosition() != null) {
+            Predicate positionFilter = builder.equal(user.get("position"), filter.getPosition());
+            query.where(positionFilter);
+        }
+
+        if (filter.getDocCode() != null) {
+            Predicate documentFilter = builder.equal(user.get("docCode"), filter.getDocCode());
+            query.where(documentFilter);
+        }
+
+        if (filter.getCitizenshipCode() != null) {
+            Predicate citizenshipCodeFilter = builder.equal(user.get("citizenshipCode"), filter.getCitizenshipCode());
+            query.where(citizenshipCodeFilter);
+        }
+
+        return em.createQuery(query).getResultList();
     }
 
     /**

@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.bellintegrator.practice.exceptions.DataNotFoundException;
 import ru.bellintegrator.practice.exceptions.UpdateException;
 import ru.bellintegrator.practice.dao.organization.OrganizationDao;
-import ru.bellintegrator.practice.dao.specification.SearchCriteria;
 import ru.bellintegrator.practice.model.Organization;
 import ru.bellintegrator.practice.model.mapper.MapperFacade;
+import ru.bellintegrator.practice.view.organization.OrganizationListFilter;
 import ru.bellintegrator.practice.view.organization.OrganizationListItemView;
 import ru.bellintegrator.practice.view.organization.OrganizationSaveView;
 import ru.bellintegrator.practice.view.organization.OrganizationUpdateView;
@@ -34,11 +34,12 @@ public class OrganizationServiceImpl implements OrganizationService {
     /**
      * {@inheritDoc}
      * @return
+     * @param filter
      */
     @Override
     @Transactional(readOnly = true)
-    public List<OrganizationListItemView> findAllBySearchCriteria(List<SearchCriteria> params) {
-        List<Organization> all = dao.findAll(params);
+    public List<OrganizationListItemView> findAllByFilter(OrganizationListFilter filter) {
+        List<Organization> all = dao.findAllByFilter(filter);
         return mapperFacade.mapAsList(all, OrganizationListItemView.class);
     }
 

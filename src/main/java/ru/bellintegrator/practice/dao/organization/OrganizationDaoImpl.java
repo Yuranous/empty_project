@@ -11,9 +11,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ru.bellintegrator.practice.dao.specification.BaseQueryCriteriaConsumer;
-import ru.bellintegrator.practice.dao.specification.SearchCriteria;
 import ru.bellintegrator.practice.model.Organization;
+import ru.bellintegrator.practice.view.organization.OrganizationListFilter;
 
 /**
  * {@inheritDoc}
@@ -30,20 +29,47 @@ public class OrganizationDaoImpl implements OrganizationDao {
 
     /**
      * {@inheritDoc}
+     * @param filter
      */
     @Override
-    public List<Organization> findAll(List<SearchCriteria> params) {
+    public List<Organization> findAllByFilter(OrganizationListFilter filter) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<Organization> query = builder.createQuery(Organization.class);
-        Root<Organization> r = query.from(Organization.class);
+        Root<Organization> organization = query.from(Organization.class);
 
-        Predicate predicate = builder.conjunction();
+        if (filter.getName() != null) {
+            Predicate nameFilter = builder.equal(organization.get("name"), filter.getName());
+            query.where(nameFilter);
+        }
 
-        BaseQueryCriteriaConsumer searchConsumer =
-                new BaseQueryCriteriaConsumer(predicate, builder, r);
-        params.forEach(searchConsumer);
-        predicate = searchConsumer.getPredicate();
-        query.where(predicate);
+        if (filter.getFullName() != null) {
+            Predicate orgIdFilter = builder.equal(organization.get("fullName"), filter.getFullName());
+            query.where(orgIdFilter);
+        }
+
+        if (filter.getInn() != null) {
+            Predicate addressFilter = builder.equal(organization.get("inn"), filter.getInn());
+            query.where(addressFilter);
+        }
+        if (filter.getKpp() != null) {
+            Predicate phoneFilter = builder.equal(organization.get("kpp"), filter.getKpp());
+            query.where(phoneFilter);
+        }
+
+        if (filter.getAddress() != null) {
+            Predicate phoneFilter = builder.equal(organization.get("address"), filter.getAddress());
+            query.where(phoneFilter);
+        }
+
+        if (filter.getPhone() != null) {
+            Predicate phoneFilter = builder.equal(organization.get("phone"), filter.getPhone());
+            query.where(phoneFilter);
+        }
+
+        if (filter.getIsActive() != null) {
+            Predicate isActiveFilter = builder.equal(organization.get("isActive"), filter.getIsActive());
+            query.where(isActiveFilter);
+        }
 
         return em.createQuery(query).getResultList();
     }

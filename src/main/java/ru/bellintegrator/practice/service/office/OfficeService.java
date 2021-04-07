@@ -4,7 +4,7 @@ import java.util.List;
 import ru.bellintegrator.practice.exceptions.DataNotFoundException;
 import ru.bellintegrator.practice.exceptions.SaveException;
 import ru.bellintegrator.practice.exceptions.UpdateException;
-import ru.bellintegrator.practice.dao.specification.SearchCriteria;
+import ru.bellintegrator.practice.view.office.OfficeListFilter;
 import ru.bellintegrator.practice.view.office.OfficeListItemView;
 import ru.bellintegrator.practice.view.office.OfficeSaveView;
 import ru.bellintegrator.practice.view.office.OfficeUpdateView;
@@ -18,11 +18,11 @@ public interface OfficeService {
     /**
      * Получить список офисов
      *
-     * @param params список критериев для поиска офисов
+     * @param filter список критериев для поиска офисов
      *
      * @return Список информации об офисах
      */
-    List<OfficeListItemView> finAllBySearchCriteria(List<SearchCriteria> params);
+    List<OfficeListItemView> finAllByFilter(OfficeListFilter filter);
 
     /**
      * Получить офис по идентификатору
@@ -38,7 +38,6 @@ public interface OfficeService {
      *
      * @param office информация о новом офиссе
      *
-     * @return Статус процесса
      */
     void save(OfficeSaveView office) throws SaveException;
 

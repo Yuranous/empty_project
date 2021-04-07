@@ -4,7 +4,7 @@ import java.util.List;
 import ru.bellintegrator.practice.exceptions.DataNotFoundException;
 import ru.bellintegrator.practice.exceptions.SaveException;
 import ru.bellintegrator.practice.exceptions.UpdateException;
-import ru.bellintegrator.practice.dao.specification.SearchCriteria;
+import ru.bellintegrator.practice.view.user.UserListFilter;
 import ru.bellintegrator.practice.view.user.UserListItemView;
 import ru.bellintegrator.practice.view.user.UserSaveView;
 import ru.bellintegrator.practice.view.user.UserUpdateView;
@@ -18,12 +18,10 @@ public interface UserService {
     /**
      * Получить список пользователей
      *
-     * @param params список критерией для поиска пользователей
-     * @param officeId идентификатор офиса, в котором работают пользователи
-     *
+     * @param filter список критерией для поиска пользователей
      * @return Список информации о пользователях
      */
-    List<UserListItemView> findAllUsersBySearchCriteria(List<SearchCriteria> params, Long officeId);
+    List<UserListItemView> findAllUsersByFilter(UserListFilter filter);
 
     /**
      * Получить пользователя по идентификатору

@@ -12,7 +12,6 @@ import ru.bellintegrator.practice.exceptions.UpdateException;
 import ru.bellintegrator.practice.dao.country.CountryDao;
 import ru.bellintegrator.practice.dao.doctype.DocumentTypeDao;
 import ru.bellintegrator.practice.dao.office.OfficeDao;
-import ru.bellintegrator.practice.dao.specification.SearchCriteria;
 import ru.bellintegrator.practice.dao.user.UserDao;
 import ru.bellintegrator.practice.model.Country;
 import ru.bellintegrator.practice.model.Document;
@@ -20,6 +19,7 @@ import ru.bellintegrator.practice.model.DocumentType;
 import ru.bellintegrator.practice.model.Office;
 import ru.bellintegrator.practice.model.User;
 import ru.bellintegrator.practice.model.mapper.MapperFacade;
+import ru.bellintegrator.practice.view.user.UserListFilter;
 import ru.bellintegrator.practice.view.user.UserListItemView;
 import ru.bellintegrator.practice.view.user.UserSaveView;
 import ru.bellintegrator.practice.view.user.UserUpdateView;
@@ -51,11 +51,12 @@ public class UserServiceImpl implements UserService {
     /**
      * {@inheritDoc}
      * @return
+     * @param filter
      */
     @Override
     @Transactional(readOnly = true)
-    public List<UserListItemView> findAllUsersBySearchCriteria(List<SearchCriteria> params, Long officeId) {
-        List<User> all = userDao.findAll(params, officeId);
+    public List<UserListItemView> findAllUsersByFilter(UserListFilter filter) {
+        List<User> all = userDao.findAllByFilter(filter);
         return mapperFacade.mapAsList(all, UserListItemView.class);
     }
 

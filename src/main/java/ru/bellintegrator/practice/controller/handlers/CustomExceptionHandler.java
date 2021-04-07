@@ -3,7 +3,6 @@ package ru.bellintegrator.practice.controller.handlers;
 import java.util.StringJoiner;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.bellintegrator.practice.exceptions.DataNotFoundException;
@@ -17,7 +16,6 @@ public class CustomExceptionHandler {
     @ExceptionHandler(value = {
             SaveException.class,
             UpdateException.class,
-            MissingServletRequestParameterException.class,
             DataNotFoundException.class
     })
     public ErrorView handleException(Exception e) {

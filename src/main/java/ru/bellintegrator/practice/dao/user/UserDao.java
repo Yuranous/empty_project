@@ -2,8 +2,8 @@ package ru.bellintegrator.practice.dao.user;
 
 import java.util.List;
 import java.util.Optional;
-import ru.bellintegrator.practice.dao.specification.SearchCriteria;
 import ru.bellintegrator.practice.model.User;
+import ru.bellintegrator.practice.view.user.UserListFilter;
 
 /**
  * DAO пользователя
@@ -13,12 +13,10 @@ public interface UserDao {
     /**
      * Получить список пользователей
      *
-     * @param params список критерией для поиска пользователей
-     * @param officeId идентификатор офиса, в котором работают пользователи
-     *
+     * @param filter список критерией для поиска пользователей
      * @return Список пользователей, удовлетворяющих критериям поиска
      */
-    List<User> findAll(List<SearchCriteria> params, Long officeId);
+    List<User> findAllByFilter(UserListFilter filter);
 
     /**
      * Получить пользователя

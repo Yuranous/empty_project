@@ -5,15 +5,15 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.bellintegrator.practice.dao.office.OfficeDao;
+import ru.bellintegrator.practice.dao.organization.OrganizationDao;
 import ru.bellintegrator.practice.exceptions.DataNotFoundException;
 import ru.bellintegrator.practice.exceptions.SaveException;
 import ru.bellintegrator.practice.exceptions.UpdateException;
-import ru.bellintegrator.practice.dao.office.OfficeDao;
-import ru.bellintegrator.practice.dao.organization.OrganizationDao;
-import ru.bellintegrator.practice.dao.specification.SearchCriteria;
 import ru.bellintegrator.practice.model.Office;
 import ru.bellintegrator.practice.model.Organization;
 import ru.bellintegrator.practice.model.mapper.MapperFacade;
+import ru.bellintegrator.practice.view.office.OfficeListFilter;
 import ru.bellintegrator.practice.view.office.OfficeListItemView;
 import ru.bellintegrator.practice.view.office.OfficeSaveView;
 import ru.bellintegrator.practice.view.office.OfficeUpdateView;
@@ -43,8 +43,8 @@ public class OfficeServiceImpl implements OfficeService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<OfficeListItemView> finAllBySearchCriteria(List<SearchCriteria> params) {
-        List<Office> all = officeDao.findAllBySearchCriteria(params);
+    public List<OfficeListItemView> finAllByFilter(OfficeListFilter filter) {
+        List<Office> all = officeDao.finAllByFilter(filter);
         return mapperFacade.mapAsList(all, OfficeListItemView.class);
     }
 

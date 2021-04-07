@@ -24,7 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
+import ru.bellintegrator.practice.view.organization.OrganizationListFilter;
 import ru.bellintegrator.practice.view.organization.OrganizationSaveView;
 import ru.bellintegrator.practice.view.organization.OrganizationUpdateView;
 
@@ -38,16 +38,30 @@ public class OrganizationControllerTest {
 
     @Test
     public void organizations_NoNameParameter_ShouldThrowException() throws Exception {
-        mockMvc.perform(get("/api/organization/list"))
+        OrganizationListFilter organization = new OrganizationListFilter();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson = ow.writeValueAsString(organization);
+        mockMvc.perform(post("/api/organization/list")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(requestJson))
                 .andExpect(result -> assertTrue(result.getResolvedException()
-                        instanceof MissingServletRequestParameterException));
+                        instanceof MethodArgumentNotValidException));
     }
 
 
     @Test
     public void organizations_ShouldReturnFoundOrganizationViewList() throws Exception {
-        mockMvc.perform(get("/api/organization/list")
-                .param("name", "СБ"))
+        OrganizationListFilter organization = new OrganizationListFilter();
+        organization.setName("СБ");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        String requestJson = ow.writeValueAsString(organization);
+        mockMvc.perform(post("/api/organization/list")
+                .contentType(APPLICATION_JSON_UTF8)
+        .content(requestJson))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))

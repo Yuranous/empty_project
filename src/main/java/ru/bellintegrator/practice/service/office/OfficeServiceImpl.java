@@ -31,7 +31,8 @@ public class OfficeServiceImpl implements OfficeService {
 
 
     @Autowired
-    public OfficeServiceImpl(OfficeDao officeDao, OrganizationDao organizationDao, MapperFacade mapperFacade) {
+    public OfficeServiceImpl(OfficeDao officeDao, OrganizationDao organizationDao,
+                             MapperFacade mapperFacade) {
         this.officeDao = officeDao;
         this.organizationDao = organizationDao;
         this.mapperFacade = mapperFacade;
@@ -39,6 +40,7 @@ public class OfficeServiceImpl implements OfficeService {
 
     /**
      * {@inheritDoc}
+     *
      * @return
      */
     @Override
@@ -50,6 +52,7 @@ public class OfficeServiceImpl implements OfficeService {
 
     /**
      * {@inheritDoc}
+     *
      * @return
      */
     @Override
@@ -66,6 +69,7 @@ public class OfficeServiceImpl implements OfficeService {
 
     /**
      * {@inheritDoc}
+     *
      * @param view
      */
     @Transactional
@@ -83,6 +87,7 @@ public class OfficeServiceImpl implements OfficeService {
 
     /**
      * {@inheritDoc}
+     *
      * @param office
      */
     @Transactional
@@ -92,13 +97,7 @@ public class OfficeServiceImpl implements OfficeService {
 
         if (source.isPresent()) {
             Office src = source.get();
-            src.setName(office.getName());
-            src.setAddress(office.getAddress());
-            src.setPhone(office.getPhone());
-            if (office.getIsActive() != null) {
-                src.setIsActive(office.getIsActive());
-            }
-
+            mapperFacade.map(office, src);
             officeDao.update(src);
         } else {
             throw new UpdateException("There is no office with passed id. Check id value");

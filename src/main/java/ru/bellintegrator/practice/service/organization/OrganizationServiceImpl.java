@@ -5,9 +5,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.bellintegrator.practice.dao.organization.OrganizationDao;
 import ru.bellintegrator.practice.exceptions.DataNotFoundException;
 import ru.bellintegrator.practice.exceptions.UpdateException;
-import ru.bellintegrator.practice.dao.organization.OrganizationDao;
 import ru.bellintegrator.practice.model.Organization;
 import ru.bellintegrator.practice.model.mapper.MapperFacade;
 import ru.bellintegrator.practice.view.organization.OrganizationListFilter;
@@ -33,8 +33,9 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     /**
      * {@inheritDoc}
-     * @return
+     *
      * @param filter
+     * @return
      */
     @Override
     @Transactional(readOnly = true)
@@ -45,6 +46,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     /**
      * {@inheritDoc}
+     *
      * @return
      */
     @Override
@@ -83,13 +85,8 @@ public class OrganizationServiceImpl implements OrganizationService {
             src.setInn(organization.getInn());
             src.setKpp(organization.getKpp());
             src.setAddress(organization.getAddress());
-            if (organization.getPhone() != null) {
-                src.setPhone(organization.getPhone());
-            }
-            if (organization.getIsActive() != null) {
-                src.setIsActive(organization.getIsActive());
-            }
-
+            src.setPhone(organization.getPhone());
+            src.setIsActive(organization.getIsActive());
             dao.update(src);
         } else {
             throw new UpdateException("No organization with this id was found");

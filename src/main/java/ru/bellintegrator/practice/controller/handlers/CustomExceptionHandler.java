@@ -1,6 +1,7 @@
 package ru.bellintegrator.practice.controller.handlers;
 
 import java.util.StringJoiner;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,23 +14,18 @@ import ru.bellintegrator.practice.view.response.ErrorView;
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
-    @ExceptionHandler(value = {
-            SaveException.class,
-            UpdateException.class,
-            DataNotFoundException.class
-    })
-    public ErrorView handleException(Exception e) {
-        return new ErrorView(e.getMessage());
-    }
-
-    @ExceptionHandler(value = {
-            MethodArgumentNotValidException.class
-    })
-    public ErrorView handleValidationException(Exception e) {
-        StringJoiner joiner = new StringJoiner("; ");
-        for (ObjectError error : ((MethodArgumentNotValidException) e).getBindingResult().getAllErrors()) {
-            joiner.add(error.getDefaultMessage());
+    @ExceptionHandler(value = Exception.class)
+    public ErrorView handle(Exception e) {
+        if (e instanceof MethodArgumentNotValidException) {
+            StringJoiner joiner = new StringJoiner("; ");
+            for (ObjectError error : ((MethodArgumentNotValidException) e).getBindingResult().getAllErrors()) {
+                joiner.add(error.getDefaultMessage());
+            }
+            return new ErrorView(joiner.toString(), HttpStatus.NOT_ACCEPTABLE.toString());
         }
-        return new ErrorView(joiner.toString());
+        if (e instanceof SaveException || e instanceof UpdateException || e instanceof DataNotFoundException) {
+            return new ErrorView(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY.toString());
+        }
+        return new ErrorView("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR.toString());
     }
 }

@@ -1,10 +1,9 @@
 package ru.bellintegrator.practice.model.mapper;
 
+import java.util.List;
 import ma.glasnost.orika.MapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * {@inheritDoc}

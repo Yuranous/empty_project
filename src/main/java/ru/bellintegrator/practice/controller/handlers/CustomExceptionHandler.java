@@ -1,7 +1,7 @@
 package ru.bellintegrator.practice.controller.handlers;
 
 import java.util.StringJoiner;
-import org.springframework.http.HttpStatus;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,17 +15,20 @@ import ru.bellintegrator.practice.view.response.ErrorView;
 public class CustomExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
-    public ErrorView handle(Exception e) {
+    public ErrorView handle(Exception e, HttpServletResponse response) {
         if (e instanceof MethodArgumentNotValidException) {
             StringJoiner joiner = new StringJoiner("; ");
             for (ObjectError error : ((MethodArgumentNotValidException) e).getBindingResult().getAllErrors()) {
                 joiner.add(error.getDefaultMessage());
             }
-            return new ErrorView(joiner.toString(), HttpStatus.NOT_ACCEPTABLE.toString());
+            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+            return new ErrorView(joiner.toString());
         }
         if (e instanceof SaveException || e instanceof UpdateException || e instanceof DataNotFoundException) {
-            return new ErrorView(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY.toString());
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return new ErrorView(e.getMessage());
         }
-        return new ErrorView("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR.toString());
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return new ErrorView("Something went wrong");
     }
 }

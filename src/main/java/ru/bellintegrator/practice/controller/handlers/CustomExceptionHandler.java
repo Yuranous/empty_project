@@ -1,6 +1,9 @@
 package ru.bellintegrator.practice.controller.handlers;
 
 import java.util.StringJoiner;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,6 +16,8 @@ import ru.bellintegrator.practice.view.response.ErrorView;
 
 @RestControllerAdvice
 public class CustomExceptionHandler {
+
+    private static final Logger logger = Logger.getLogger(CustomExceptionHandler.class.getName());
 
     @ExceptionHandler(value = Exception.class)
     public ErrorView handle(Exception e, HttpServletResponse response) {
@@ -28,7 +33,11 @@ public class CustomExceptionHandler {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return new ErrorView(e.getMessage());
         }
+        UUID error_id = UUID.randomUUID();
+        String logging_message = e.getMessage() + " " + "Error identifier: " + error_id;
+        logger.log(Level.SEVERE, logging_message);
         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        return new ErrorView("Something went wrong");
+        return new ErrorView("Something went wrong. Please contact with support team with this error identifier: " +
+               error_id );
     }
 }
